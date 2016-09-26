@@ -1,0 +1,32 @@
+#content {
+  width:100%;
+  height: 100%;
+}
+
+.btn-panel {
+  background: #444444;
+  color: #FFFFFF;
+  width:100%;
+  height:50px;
+  text-align:center;
+  font-size:24px;
+}
+
+.btn-panel:hover {
+  color: #F1F1F1;
+}
+
+.btn-panel:focus {
+  outline-color: transparent;
+  outline-style: none;
+}
+
+#loading-icon {
+  height:50px;
+}
+
+#panel {
+  color: #FFFFFF;
+  height: 300px;
+  background:#444444;
+}
