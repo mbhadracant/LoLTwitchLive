@@ -1,0 +1,101 @@
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+*:focus {
+    outline: none;
+}
+
+#request {
+  display:none;
+}
+
+#content {
+  height:400px;
+  width:300px;
+  padding:10px;
+}
+
+#content input {
+  width:100%;
+}
+
+#header {
+  font-size: 22px;
+  text-align: center;
+  font-weight: bolder;
+}
+
+.break {
+  width:300px;
+  border-bottom: 1px solid lightgrey;
+  margin-bottom:10px;
+  margin-top: 10px;
+}
+
+#message {
+  color:grey;
+  padding:10px;
+  font-size:14px;
+  text-align: center;
+}
+
+#add-streamer {
+  font-weight: bold;
+  position: relative;
+  left:50%;
+  transform:translateX(-50%);
+  color: #9ad449;
+  border: solid #9ad449 2px;
+  text-decoration: none;
+  padding:5px;
+  border-radius:20px;
+  background:none;
+  cursor: pointer;
+}
+
+#add-streamer:hover {
+  color: #9de33b;
+  border: solid #9de33b 2px;
+}
+
+form select {
+  margin-left:0px;
+  width:260px;
+  height:30px;
+  position: relative;
+  background:white;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+#request-submit {
+  width:75px;
+  font-weight: bold;
+  border:2px solid black;
+  color:black;
+  position: relative;
+  left:50%;
+  transform:translateX(-50%);
+  text-decoration: none;
+  padding:5px;
+  border-radius:20px;
+  background:none;
+  cursor: pointer;
+}
+
+#request-submit:hover {
+  background:black;
+  color:white;
+}
+
+.success {
+  text-align: center;
+}
+
+form {
+  padding:10px;
+}
+form > * {
+  margin:10px;
+}

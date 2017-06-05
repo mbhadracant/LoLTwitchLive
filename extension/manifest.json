@@ -1,17 +1,16 @@
 {
-    "name": "TwitchLoLPlayersInfo",
-    "description": "Shows information on all players in the live game the LoL streamer is playing",
-    "version": "0.1",
-    "permissions": [
-    "tabs","<all_urls>"
-    ],
-    "content_scripts": [
-        {
-        "matches": [ "*://*.twitch.tv/*"],
-        "js": ["jquery.js", "bootstrap.js", "script.js"],
-        "css": ["bootstrap.css", "main.css"],
-        "run_at": "document_end"
-        }
-    ],
-    "manifest_version":2
+  "manifest_version": 2,
+
+  "name": "TwitchLoLPlayersInfo",
+  "description": "Shows information on all players in the live game the LoL streamer is playing",
+  "version": "1.0",
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "https://ajax.googleapis.com/",
+    "<all_urls>"
+  ]
 }

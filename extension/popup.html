@@ -1,0 +1,48 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="css/popup.css">
+  <link rel="stylesheet" href="css/jquery.typeahead.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+</head>
+
+<body>
+  <div id="content">
+    <div id="header">LoLTwitchLive</div>
+    <div class="break"></div>
+    <div id="home">
+      <div id="message"></div>
+      <div class="break"></div>
+      <button id="add-streamer">ADD STREAMER/SUMMONER</button>
+    </div>
+    <div id="request">
+      <form action="http://localhost:8080/add" method="post">
+        <div class="typeahead__container">
+          <div class="typeahead__field">
+            <span class="typeahead__query">
+                 <input class="js-typeahead-twitch-name" name="twitchName" type="search" placeholder="Twitch Name" autocomplete="off">
+             </span>
+          </div>
+        </div>
+        <div class="typeahead__container">
+          <div class="typeahead__field">
+            <span class="typeahead__query">
+                 <input class="js-typeahead-summoner-name" name="summonerName" type="search" placeholder="Summoner Name" autocomplete="off">
+             </span>
+          </div>
+        </div>
+        <select name="region">
+          <option value="na1">NA</option>
+          <option value="euw1">EUW</option>
+        </select>
+        <br />
+        <button id="request-submit" type="submit">SUBMIT</button>
+      </form>
+    </div>
+  </div>
+  <script src="js/jquery.js"></script>
+  <script src="js/jquery.typeahead.min.js"></script>
+  <script src="js/popup.js"></script>
+</body>
+
+</html>
