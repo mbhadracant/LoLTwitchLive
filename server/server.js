@@ -16,9 +16,10 @@ MongoClient.connect(url, function(err, db) {
   console.log("Connected successfully to server");
   collection = db.collection('stream');
   serverInit();
+  var liveStreamers = findLiveStreamers();
   setInterval(function() {
     var liveStreamers = findLiveStreamers();
-  }, 3000);
+  }, 10000);
 });
 
 function serverInit() {
@@ -37,8 +38,6 @@ function home(req, res, next) {
 }
 
 function add(req, res, next) {
-
-
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
       var id = JSON.parse(body)['id'];
@@ -73,11 +72,6 @@ function add(req, res, next) {
   }
 
   request(`https://${req.body.region}.api.riotgames.com/lol/summoner/v3/summoners/by-name/${req.body.summonerName}?api_key=${config.RIOT_API_KEY}`, callback);
-
-}
-
-function getSummonerId(summoner) {
-
 }
 
 function findLiveStreamers() {
@@ -106,7 +100,22 @@ function checkIfStreamerIsPlaying(twitchName, doc) {
   var summoners = doc['summoners'];
   for (var i = 0; i < summoners.length; i++) {
     var summoner = summoners[i];
-
-    console.log(summoner['id'] + " - " + summoner['summonerName']);
+    console.log("testing - " + summoner['summonerName']);
+    setLiveDataIfFound(twitchName, summoner);
   }
 }
+
+function setLiveDataIfFound(twitchName, summoner) {
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+
+        console.log("YAY - " + summoner['summonerName']);
+    } else if(!error && response.statusCode == 503) {
+        console.log("503 - " + summoner['summonerName']);
+    }
+  }
+  request(`https://${summoner['region']}.api.riotgames.com/lol/spectator/v3/active-games/by-summoner/${summoner['id']}?api_key=${config.RIOT_API_KEY}`, callback);
+
+}
+
+//db.lul.update({name:"Mayur"}, {$set: {kek:'xda'}});

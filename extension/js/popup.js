@@ -49,4 +49,19 @@ $(function() {
     }
   });
 
+  $.getJSON("../match.json", function(game) {
+    var participants = game['participants'];
+    for(var i = 0; i < participants.length; i++) {
+      var player = participants[i];
+      var teamDiv = (player['teamId'] == 100) ? $("#blue") : $("#red");
+      var name = player['summonerName'];
+      var playerDiv = $("<div class='player'>");
+      var nameDiv = $("<div class='name'>");
+      $(nameDiv).html(name);
+      $(playerDiv).append(nameDiv);
+      $(teamDiv).append(playerDiv);
+    }
+  });
+
+
 });
