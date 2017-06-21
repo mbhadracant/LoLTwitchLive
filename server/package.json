@@ -2,9 +2,10 @@
   "name": "my_package",
   "version": "1.0.0",
   "dependencies": {
+    "leagueapi": "^0.4.21",
     "mongodb": "^2.2.28",
-    "request": "^2.75.0",
-    "restify": "^4.1.1"
+    "restify": "^4.1.1",
+    "twitch-api": "^0.4.6"
   },
   "devDependencies": {}
 }
