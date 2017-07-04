@@ -1,4 +1,5 @@
 var twitchName;
+var gameData;
 
 $(function() {
 
@@ -68,6 +69,7 @@ $(function() {
 
 
     $.getJSON("http://localhost:8080/" + twitchName, function(game) {
+      gameData = game;
       var platformId = game['platformId'];
       var version = game['version']
       var participants = game['participants'];
@@ -78,6 +80,7 @@ $(function() {
         var tier = player['tier'];
 
         var playerDiv = $("<div class='player'>");
+        $(playerDiv).attr("index", i);
         var nameDiv = $("<div class='name'>");
         var championImg = $("<img class='champion-img'>");
         var spellsDiv = $("<div class='summoner-spells'>");
@@ -111,6 +114,7 @@ $(function() {
         //tooltips
 
         $(tierImg).attr("title",tier);
+
         var championName = championImageLink.slice(championImageLink.indexOf("champion/") + "champion/".length);
         championName = championName.substring(0,championName.length-4);
 
@@ -125,12 +129,14 @@ $(function() {
       }
 
       tippy("*", {
-        position: 'right',
+        position: 'top',
         duration: 200,
         arrow: true,
         arrowSize: 'small',
         size: 'small'
       });
+
+
     }).fail(function(err) {
 
       if (err.status == 400) {
@@ -170,7 +176,7 @@ $(function() {
     $('#live-data').css("display", "flex");
 
     $(".player").click(function() {
-
+      $(".modal-content").empty();
       $(".mask").fadeIn(200);
       var modal = $("#modal");
       $(modal).fadeIn(200);
@@ -186,6 +192,29 @@ $(function() {
       $(runesTab).addClass("tab-item-selected");
       $("#modal-runes").show();
       $("#modal-mastery").hide();
+      var index = $(this).attr("index");
+      var runes = gameData['participants'][index]['runes'];
+
+      for(var i = 0; i < runes.length;i++) {
+        var rune = runes[i];
+        var quantityText = $("<h4>");
+        $(quantityText).html(rune['count'] + "x");
+        var runeImg = $("<img>");
+        $(runeImg).attr("src",rune['img']);
+        $(runeImg).attr("title",rune['data']['name']);
+        var descriptionText = $("<h5>");
+        $(descriptionText).html(rune['data']['sanitizedDescription']);
+
+        var container = $("<div>");
+        $(container).addClass("rune-item");
+
+        $(container).append(quantityText);
+        $(container).append(runeImg);
+        $(container).append(descriptionText);
+
+        $("#modal-runes").append(container);
+      }
+
       $(document).mouseup(function(e) {
         var container = $("#modal");
 
@@ -215,6 +244,8 @@ $(function() {
                 $("#modal-runes").show();
                 $("#modal-mastery").hide();
 
+
+
             }
             if (masteryText === selectedText) {
                  if(!$(this).hasClass("tab-item-selected")) {
@@ -227,7 +258,18 @@ $(function() {
             }
 
         });
+
+        tippy(".rune-item img", {
+          position: 'right',
+          duration: 200,
+          arrow: true,
+          arrowSize: 'small',
+          size: 'small'
+        });
+
     });
+
+
   });
 
 });
