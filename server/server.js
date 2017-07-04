@@ -206,11 +206,11 @@ function setLiveData(twitchName, region) {
         var spellId1 = player['spell1Id'];
         var spellId2 = player['spell2Id'];
         var summonerId = player['summonerId'];
-
+        var runes = player['runes'];
         function setChampionImage(index, championId) {
           var options = {champData: 'image', version: item['live']['version'], locale: 'en_US'}
           LolApi.Static.getChampionById(championId, options, region, function(err, data) {
-
+            console.log("champion - " + twitchName);
             var filename = data['image']['full'];
             var setObject = {};
             setObject['live.participants.' + index + '.championImage'] = `http://ddragon.leagueoflegends.com/cdn/${options.version}/img/champion/${filename}`;
@@ -246,7 +246,6 @@ function setLiveData(twitchName, region) {
               if(leagues[j]['queue'] == 'RANKED_SOLO_5x5') {
                 var setObject = {};
                 setObject['live.participants.' + index + '.tier'] = leagues[j]['tier'];
-                console.log(leagues[j]['tier']);
                 collection.updateOne({'twitchName':twitchName},{$set: setObject});
               }
             }
@@ -255,9 +254,39 @@ function setLiveData(twitchName, region) {
 
         }
 
+        function setRunesData(index, runes) {
+
+          for(var j = 0; j < runes.length; j++) {
+            var runeId = runes[j]['runeId'];
+
+            function setRune(runeId, runeIndex, participantIndex) {
+              var options = {runeData: 'all', version : item['live']['version'], locale: 'en_US'}
+              LolApi.Static.getRuneById(runeId, options, function(err, data) {
+
+                if(!err) {
+                  var setObject = {};
+                  setObject['live.participants.' + participantIndex + '.runes.' + runeIndex + '.data'] = data;
+                  collection.updateOne({'twitchName':twitchName},{$set: setObject}, function(err, result) {
+                    var runeFile = data['image']['full'];
+                    var imgObject = {};
+                    var runeImg = `http://ddragon.leagueoflegends.com/cdn/${options.version}/img/rune/${runeFile}`;
+                    imgObject['live.participants.' + participantIndex + '.runes.' + runeIndex + '.img'] = runeImg;
+                    collection.updateOne({'twitchName':twitchName},{$set: imgObject});
+                  });
+                }
+              });
+            }
+
+            setRune(runeId, j, index);
+
+          }
+
+        }
+
         setChampionImage(i, championId);
         setSpellsImage(i, spellId1, 1);
         setSpellsImage(i, spellId2, 2);
+        setRunesData(i,runes);
         setRankedData(i, summonerId);
       }
     });
