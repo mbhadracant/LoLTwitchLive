@@ -33,7 +33,7 @@ MongoClient.connect(url, function(err, db) {
   var liveStreamers = findLiveStreamers();
   setInterval(function() {
     var liveStreamers = findLiveStreamers();
-  }, 10000);
+  }, 30000);
 });
 
 function serverInit() {
@@ -132,9 +132,11 @@ function findLiveStreamers() {
 
 function checkStreamIsOnline(twitchName, doc) {
   twitch.getChannelStream(twitchName, function(err, data) {
-    var isStreaming = (data['stream'] == null) ? false : true;
-    if (isStreaming) {
-      checkIfStreamerIsPlaying(twitchName, doc);
+    if(!err) {
+      var isStreaming = (data['stream'] == null) ? false : true;
+      if (isStreaming) {
+        checkIfStreamerIsPlaying(twitchName, doc);
+      }
     }
   });
 }
@@ -154,6 +156,9 @@ function setLiveDataIfFound(twitchName, summoner) {
       collection.findOne({twitchName : twitchName}, function(err, item) {
               if(item['live'] == null) {
                 collection.updateOne({'twitchName':twitchName},{$set: {'live':data}}, null, function(err, r) {
+                  var setObject = {};
+                  setObject['live.summonerName'] = summoner.summonerName;
+                  collection.updateOne({'twitchName':twitchName},{$set: setObject});
                   setLiveData(twitchName, summoner.region);
                 });
               } else {
@@ -162,8 +167,13 @@ function setLiveDataIfFound(twitchName, summoner) {
       });
       console.log("YAY - " + summoner['summonerName']);
     } else {
-      collection.updateOne({'twitchName':twitchName},{$set: {'live':null}});
-      console.log("error - " + summoner['summonerName']);
+      collection.findOne({twitchName : twitchName}, function(err, item) {
+              if(item['live'] != null && item['live']['summonerName'] == summoner['summonerName']) {
+                collection.updateOne({'twitchName':twitchName},{$set: {'live':null}});
+              } else {
+                console.log("SKIPPED - " + summoner['summonerName']);
+              }
+      });
     }
   });
 }
@@ -184,7 +194,6 @@ function setLiveData(twitchName, region) {
 
   function setImages() {
 
-
     collection.findOne({twitchName : twitchName}, function(err, item) {
       if(item['live'] == null) {
         return;
@@ -196,6 +205,7 @@ function setLiveData(twitchName, region) {
         var championId = player['championId'];
         var spellId1 = player['spell1Id'];
         var spellId2 = player['spell2Id'];
+        var summonerId = player['summonerId'];
 
         function setChampionImage(index, championId) {
           var options = {champData: 'image', version: item['live']['version'], locale: 'en_US'}
@@ -214,6 +224,9 @@ function setLiveData(twitchName, region) {
 
 
           LolApi.Static.getSummonerSpellById(spellId, options, function(err, data) {
+            if(data == undefined) {
+              return;
+            }
             var filename = data['image']['full'];
             var setObject = {};
             setObject['live.participants.' + index + '.spellImage' + spellNumber] = `http://ddragon.leagueoflegends.com/cdn/${options.version}/img/spell/${filename}`;
@@ -221,14 +234,34 @@ function setLiveData(twitchName, region) {
           });
         }
 
+        function setRankedData(index, summonerId) {
+
+          LolApi.getLeagueData(summonerId, region, function(err, data) {
+            if(data == undefined) {
+              return;
+            }
+            var leagues = data[summonerId];
+
+            for(var j = 0; j < leagues.length;j++) {
+              if(leagues[j]['queue'] == 'RANKED_SOLO_5x5') {
+                var setObject = {};
+                setObject['live.participants.' + index + '.tier'] = leagues[j]['tier'];
+                console.log(leagues[j]['tier']);
+                collection.updateOne({'twitchName':twitchName},{$set: setObject});
+              }
+            }
+          });
+
+
+        }
+
         setChampionImage(i, championId);
         setSpellsImage(i, spellId1, 1);
         setSpellsImage(i, spellId2, 2);
+        setRankedData(i, summonerId);
       }
     });
   }
 
   setVersion();
 }
-
-//db.lul.update({name:"Mayur"}, {$set: {kek:'xda'}});

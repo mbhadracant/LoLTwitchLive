@@ -1,5 +1,8 @@
-html {
+html, body {
   font-family: 'Roboto', sans-serif;
+  padding:0;
+  margin:0;
+  height:260px;
 }
 
 *:focus {
@@ -10,17 +13,41 @@ html {
   display:none;
 }
 
-#content {
-  display: inline-block;
-  width:400px;
-  padding:10px;
+#nav {
+  width:100%;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center;
 }
+
+#nav i{
+  margin:10px;
+  margin-left:60px;
+  margin-right:60px;
+  color:lightgrey;
+}
+
+.active {
+  color:black !important;
+}
+
+#nav i:hover {
+  color:grey;
+  cursor: pointer;
+}
+
+#content {
+  width:400px;
+  height:260px;
+}
+
 
 #content input {
   width:100%;
 }
 
 #header {
+  padding:10px;
   font-size: 22px;
   text-align: center;
   font-weight: bolder;
@@ -38,6 +65,37 @@ html {
   padding:10px;
   font-size:14px;
   text-align: center;
+}
+
+#sub-message {
+  color:maroon;
+  padding:6px;
+  font-size:12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+#summoners {
+  margin-top:10px;
+  border:1px solid rgb(240,240,240);
+  box-shadow: 0px 0px 100px rgb(245,245,245);
+  display: none;
+  height:150px;
+  width:200px;
+  position: relative;
+  left:50%;
+  transform: translateX(-50%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-align: center;
+}
+
+.summoner-item {
+  width:200px;
+  position: relative;
+  left:50%;
+  transform: translateX(-50%);
+  padding:2px;
 }
 
 #add-streamer {
@@ -61,7 +119,7 @@ html {
 
 form select {
   margin-left:0px;
-  width:260px;
+  width:360px;
   height:30px;
   position: relative;
   background:white;
@@ -91,6 +149,8 @@ form select {
 
 .success {
   text-align: center;
+  color:darkgreen;
+  font-size:12px;
 }
 
 form {
@@ -100,13 +160,18 @@ form > * {
   margin:10px;
 }
 
+#loader {
+  width:100px;
+  position: relative;
+  left:50%;
+  transform: translateX(-50%);
+}
+
 #live-data {
-  display: -webkit-flex;
-  display: flex;
+  display: none;
   -webkit-justify-content: center;
   justify-content: center;
   margin-top:15px;
-  background:rgb(245,245,245);
 }
 
 .team {
@@ -114,52 +179,139 @@ form > * {
 }
 
 .player {
+  display: -webkit-flex;
+  display: flex;
   height:30px;
   margin:5px;
+  cursor: pointer;
 }
 
 .name {
   font-weight: bold;
-  width:110px;
+  width:115px;
   position: relative;
-  top:50%;
-  transform:translateY(-50%);
-}
-
-#blue .name {
-  margin-left:5px;
-}
-
-#red .name {
-  margin-left:5px;
-}
-
-#vs {
-  font-size:20px;
-  color:black;
-  margin-top:78px;
-  text-align: center;
-  position: absolute;
-  top:50%;
-  transform:translateY(-50%);
-  padding:5px;
-  border-radius: 50%;
+  display: flex;
+  justify-content:center;
+  align-content:center;
+  flex-direction:column;
 }
 
 #blue > .player {
   border:1px solid rgba(0,116,255,0.2);
   background:rgba(0,116,255,0.1);
+  padding-left:5px;
+
 }
 
 #red > .player {
+  padding-left:5px;
   border:1px solid rgba(255,0,0,0.2);
   background:rgba(255,0,0,0.1);
+  display: flex;
+  flex-direction: row-reverse;
 }
 
 #blue {
-  margin-right:20px;
+  margin-right:10px;
 }
 
 #red {
-  margin-left:20px;
+  margin-left:10px;
+}
+
+#red .name {
+  margin-left:4px;
+}
+
+.champion-img {
+  height:26px;
+  position: relative;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.summoner-spells {
+  display: flex;
+  flex-direction: column;
+  height:100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.spells-img {
+  height:13px;
+}
+
+.tier {
+  width:30px;
+}
+
+#modal {
+  display: none;
+  width:300px;
+  height:275px;
+  background:rgb(240,240,240);
+  box-shadow: 0px 0px 30px rgb(200,200,200);
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform: translateX(-50%)translateY(-50%);
+  padding:5px;
+  z-index:2000;
+}
+
+.mask {
+   display: none;
+   width: 100%;
+   height: 100%;
+   z-index: 1000;
+   padding: 0px;
+   margin: 0px;
+   background: transparent url(http://i.imgur.com/0KbiL.png);
+   position: fixed;
+   top: 0px;
+   overflow: hidden;
+}
+
+#modal-header {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  width:100%;
+  border-bottom:1px solid rgb(230,230,230);
+}
+
+#modal-header > h2 {
+  margin-left:10px;
+}
+
+#modal-champion-img {
+  position: relative;
+  top:50%;
+  transform: translateY(30%);
+  width:30px;
+  height:30px;
+}
+
+#modal-tabs {
+    margin-top:10px;
+    display: flex;
+    justify-content: center;
+}
+
+.modal-tab-item {
+  padding: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+  line-height: 10px;
+  border-bottom: 1px solid gainsboro;
+  cursor: pointer;
+}
+
+.tab-item-selected {
+    border-bottom: 2px solid black;
+}
+
+.modal-content {
+  padding:5px;
 }

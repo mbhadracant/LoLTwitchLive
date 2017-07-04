@@ -3,23 +3,45 @@
 <head>
   <link rel="stylesheet" href="css/popup.css">
   <link rel="stylesheet" href="css/jquery.typeahead.min.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/tippy.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
 </head>
 
 <body>
+  <div class="mask">
+
+  </div>
+  <div id="header">LoLTwitchLive</div>
+  <div class="break"></div>
   <div id="content">
-    <div id="header">LoLTwitchLive</div>
-    <div class="break"></div>
+    <div id="modal">
+      <div id="modal-header">
+        <img id="modal-champion-img"/>
+        <h2 id="modal-summoner-name"></h2>
+      </div>
+      <div id="modal-tabs">
+        <div class="modal-tab-item">RUNES</div>
+        <div class="modal-tab-item">MASTERIES</div>
+      </div>
+      <div id="modal-runes" class="modal-content">
+        LUL
+      </div>
+      <div id="modal-mastery" class="modal-content">
+        KEK
+      </div>
+    </div>
     <div id="home">
       <div id="message"></div>
-      <div class="break"></div>
-      <button id="add-streamer">ADD STREAMER/SUMMONER</button>
+      <div id="sub-message"></div>
+      <div id="summoners">
+        <h4>List of registered summoners: </h4>
+        <div class="break"></div>
+      </div>
+      <img id="loader" src="resources/loader.svg"/>
       <div id="live-data">
-        <div id="blue" class="team">
-        </div>
-        <div id="vs">VS</div>
-        <div id="red" class="team">
-        </div>
+        <div id="blue" class="team"></div>
+        <div id="red" class="team"></div>
       </div>
     </div>
     <div id="request">
@@ -39,16 +61,24 @@
           </div>
         </div>
         <select name="region">
-          <option value="na1">NA</option>
-          <option value="euw1">EUW</option>
+          <option value="na">NA</option>
+          <option value="euw">EUW</option>
+          <option value="br">BR</option>
+          <option value="kr">KR</option>
         </select>
         <br />
         <button id="request-submit" type="submit">SUBMIT</button>
       </form>
     </div>
   </div>
+  <div class="break"></div>
+  <div id="nav">
+    <i class="fa fa-home fa-3x active" aria-hidden="true"></i>
+    <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+  </div>
   <script src="js/jquery.js"></script>
   <script src="js/jquery.typeahead.min.js"></script>
+  <script src="js/tippy.min.js"></script>
   <script src="js/popup.js"></script>
 </body>
 
