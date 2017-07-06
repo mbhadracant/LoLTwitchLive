@@ -78,6 +78,9 @@ $(function() {
         var teamDiv = (player['teamId'] == 100) ? $("#blue") : $("#red");
         var name = player['summonerName'];
         var tier = player['tier'];
+        var championName = player['championData']['name'];
+        var spellName1 = player['spellsData']['name1'];
+        var spellName2 = player['spellsData']['name2'];
 
         var playerDiv = $("<div class='player'>");
         $(playerDiv).attr("index", i);
@@ -104,10 +107,10 @@ $(function() {
           $(tierImg).attr("src", "../resources/" + tier.toLowerCase() + ".png");
         }
 
-        var championImageLink = player['championImage'];
+        var championImageLink = player['championData']['imageLink'];
         $(championImg).attr("src", championImageLink);
-        var spellImage1Link = player['spellImage1'];
-        var spellImage2Link = player['spellImage2'];
+        var spellImage1Link = player['spellsData']['imageLink1'];
+        var spellImage2Link = player['spellsData']['imageLink2'];
         $(spellsImg1).attr("src", spellImage1Link);
         $(spellsImg2).attr("src", spellImage2Link);
 
@@ -115,17 +118,10 @@ $(function() {
 
         $(tierImg).attr("title",tier);
 
-        var championName = championImageLink.slice(championImageLink.indexOf("champion/") + "champion/".length);
-        championName = championName.substring(0,championName.length-4);
-
-        var summonerSpellName1 = spellImage1Link.slice(spellImage1Link.indexOf("spell/") + "spell/".length);
-        summonerSpellName1 = summonerSpellName1.substring(8,summonerSpellName1.length-4);
-        var summonerSpellName2 = spellImage2Link.slice(spellImage2Link.indexOf("spell/") + "spell/".length);
-        summonerSpellName2 = summonerSpellName2.substring(8,summonerSpellName2.length-4);
 
         $(championImg).attr("title",championName)
-        $(spellsImg1).attr("title", summonerSpellName1);
-        $(spellsImg2).attr("title", summonerSpellName2);
+        $(spellsImg1).attr("title", spellName1);
+        $(spellsImg2).attr("title", spellName2);
       }
 
       tippy("*", {
@@ -197,13 +193,17 @@ $(function() {
 
       for(var i = 0; i < runes.length;i++) {
         var rune = runes[i];
+        var runeName = rune['data']['name'];
+        var imageLink = rune['data']['imageLink'];
+        var description = rune['data']['description'];
+
         var quantityText = $("<h4>");
         $(quantityText).html(rune['count'] + "x");
         var runeImg = $("<img>");
-        $(runeImg).attr("src",rune['img']);
-        $(runeImg).attr("title",rune['data']['name']);
+        $(runeImg).attr("src",imageLink);
+        $(runeImg).attr("title",runeName);
         var descriptionText = $("<h5>");
-        $(descriptionText).html(rune['data']['sanitizedDescription']);
+        $(descriptionText).html(description);
 
         var container = $("<div>");
         $(container).addClass("rune-item");

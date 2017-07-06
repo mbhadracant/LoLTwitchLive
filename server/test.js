@@ -1,11 +1,14 @@
 var config = require('./config');
+
+
 var LolApi = require('leagueapi');
 
 LolApi.init(config.RIOT_API_KEY,'euw');
-LolApi.setRateLimit(10, 3000);
+LolApi.setRateLimit(100, 60000*2);
 
-var options = {runeData: 'all', version : '7.13.1', locale: 'en_US'}
+var options = {spellData: 'image', version : '7.13.1', locale: 'en_US', dataById: true}
 
-LolApi.Static.getRuneById(5296, options, function(err, data) {
+
+LolApi.Static.getSummonerSpellList(options, 'euw', function(err,data) {
   console.log(data);
 });
