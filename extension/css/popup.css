@@ -318,7 +318,10 @@ form > * {
   height:170px;
 }
 
-
+#modal-mastery {
+  display: flex;
+  justify-content: space-between;
+}
 
 .rune-item {
   display: flex;
@@ -334,5 +337,36 @@ form > * {
   margin-left:10px;
   margin-right:10px;
   position: relative;
+}
 
+.mastery-tree {
+  padding:5px;
+  margin:1px;
+  width:100px;
+  height:162px;
+}
+
+.mastery-tree:nth-child(1) {
+  border:1px solid #FFC9CD;
+}
+
+.mastery-tree:nth-child(2) {
+  border:1px solid #E6D7FC;
+}
+
+.mastery-tree:nth-child(3) {
+  border:1px solid #D4E9FF;
+}
+
+.mastery-row {
+  display: flex;
+  justify-content: space-between;
+  padding:3px;
+  height:20px;
+}
+
+.mastery-block {
+  height:20px;
+  width:20px;
+  border:1px solid black;
 }

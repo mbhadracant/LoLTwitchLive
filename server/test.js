@@ -10,5 +10,5 @@ var options = {spellData: 'image', version : '7.13.1', locale: 'en_US', dataById
 
 
 LolApi.Static.getSummonerSpellList(options, 'euw', function(err,data) {
-  console.log(data);
+
 });

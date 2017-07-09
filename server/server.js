@@ -241,7 +241,8 @@ function setLiveData(twitchName, region) {
           'twitchName': twitchName
         }, {
           $set: {
-            'live.version': data[0]
+            'live.version': data[0],
+            'live.region': region,
           }
         }, null, function(err, r) {
           set(data[0]);
