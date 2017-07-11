@@ -1,7 +1,10 @@
 var twitchName;
 var gameData;
-
+var server = "http://188.166.146.140:8080/";
 $(function() {
+
+    $("#request form").attr("action",server + "add");
+    $("#request form").attr("method","post");
 
     chrome.tabs.query({
         'active': true,
@@ -19,7 +22,6 @@ $(function() {
             $("#message").css("font-weight", "bold");
             $("#message").css("font-size", "18px");
         }
-
     });
 
     $(".fa-home").click(function() {
@@ -45,7 +47,7 @@ $(function() {
     });
 
     $.ajax({
-        url: "http://localhost:8080",
+        url: server,
         success: function(result) {
             var twitchNames = [];
 
@@ -67,7 +69,7 @@ $(function() {
     function makeMatchRequest(twitchName) {
 
 
-        $.getJSON("http://localhost:8080/" + twitchName, function(game) {
+        $.getJSON(server + twitchName, function(game) {
             gameData = game;
             var platformId = game['platformId'];
             var version = game['version']
@@ -151,7 +153,7 @@ $(function() {
     function getSummoners() {
         $("#summoners").show();
         $.ajax({
-            url: "http://localhost:8080/summoners/" + twitchName,
+            url: server + "/summoners/" + twitchName,
             success: function(summoners) {
                 for (var i = 0; i < summoners.length; i++) {
                     var summoner = summoners[i];
@@ -170,7 +172,7 @@ $(function() {
 
     function buildMasteryTrees() {
 
-        $.getJSON("http://localhost:8080/data/" + gameData['region'] + "/masteries", function(masteries) {
+        $.getJSON(server + "/data/" + gameData['region'] + "/masteries", function(masteries) {
             var version = gameData['version'];
 
             function addRow(masteryTree) {

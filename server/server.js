@@ -2,6 +2,7 @@ var config = require('./config');
 var restify = require('restify');
 var cron = require('node-cron');
 var LolApi = require('leagueapi');
+var mail = require('./mail');
 
 LolApi.init(config.RIOT_API_KEY, 'euw');
 LolApi.setRateLimit(100, 60000 * 2);
@@ -71,43 +72,7 @@ function home(req, res, next) {
 }
 
 function add(req, res, next) {
-
-  LolApi.Summoner.getByName(req.body.summonerName, req.body.region, function(err, summoner) {
-    if (!err) {
-      var name = Object.keys(summoner)[0];
-      var id = summoner[name]['id'];
-
-      var obj = {
-        'id': id,
-        'summonerName': req.body.summonerName,
-        'region': req.body.region
-      };
-      streamCollection.find({
-        'twitchName': req.body.twitchName
-      }).toArray(function(err, docs) {
-        if (docs.length >= 1) {
-          streamCollection.updateOne({
-            'twitchName': req.body.twitchName
-          }, {
-            $push: {
-              'summoners': obj
-            }
-          });
-        } else {
-          var doc = {};
-          doc['twitchName'] = req.body.twitchName;
-          doc['summoners'] = [];
-          doc['summoners'].push(obj);
-          streamCollection.insertOne(doc);
-        }
-        console.log('added - ' + name);
-        res.send("success");
-        next();
-      });
-    } else {
-      console.log('error adding - ' + name);
-    }
-  });
+  mail.sendMail(req.body.twitchName, req.body.summonerName, req.body.region);
 }
 
 
