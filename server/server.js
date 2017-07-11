@@ -57,6 +57,7 @@ function serverInit() {
   server.get('/:twitchName', getLiveData);
   server.get('/summoners/:twitchName', getSummoners);
   server.get('/data/:region', getData);
+  server.get('/data/:region/masteries', getMasteries);
   server.listen(8080, function() {
     console.log('%s listening at %s', server.name, server.url);
   });
@@ -149,6 +150,17 @@ function getData(req, res, next) {
     region: region
   }, function(err, item) {
     res.send(item);
+  });
+
+}
+
+function getMasteries(req, res, next) {
+  var region = req.params['region'];
+
+  dataCollection.findOne({
+    region: region
+  }, function(err, item) {
+    res.send(item['masteries']);
   });
 
 }

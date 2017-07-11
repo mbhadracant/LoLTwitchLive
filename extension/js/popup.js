@@ -89,6 +89,7 @@ $(function() {
                 var spellsImg1 = $("<img class='spells-img'>");
                 var spellsImg2 = $("<img class='spells-img'>");
                 var tierImg = $("<img class='tier'>");
+                var keystoneImg = $("<img class='keystone-img'>");
 
                 $(spellsDiv).append(spellsImg1);
                 $(spellsDiv).append(spellsImg2);
@@ -97,7 +98,7 @@ $(function() {
                 $(playerDiv).append(nameDiv);
                 $(playerDiv).append(championImg);
                 $(playerDiv).append(spellsDiv);
-
+                $(playerDiv).append(keystoneImg);
 
                 $(teamDiv).append(playerDiv);
                 if (tier == undefined) {
@@ -169,8 +170,8 @@ $(function() {
 
     function buildMasteryTrees() {
 
-        $.getJSON("http://localhost:8080/data/" + gameData['region'], function(data) {
-            var version = data['version'];
+        $.getJSON("http://localhost:8080/data/" + gameData['region'] + "/masteries", function(masteries) {
+            var version = gameData['version'];
 
             function addRow(masteryTree) {
                 var row = $("<div>");
@@ -182,12 +183,14 @@ $(function() {
             function addMasteryBlock(mastery, row) {
                 var block = $("<img>");
                 $(block).css("filter", "grayscale(100%)");
+                $(block).css("opacity", "0.5");
                 $(block).attr("mastery-id", mastery['id']);
                 $(block).attr("title", mastery['name']);
                 $(block).addClass("mastery-block");
                 var imageLink = `http://ddragon.leagueoflegends.com/cdn/${version}/img/mastery/${mastery['image']['full']}`;
                 $(block).attr("src", imageLink);
                 $(row).append(block);
+                return block;
             }
 
             function addMasteryTree() {
@@ -201,7 +204,6 @@ $(function() {
             var currentCounter = 0;
             var reach2Row = true;
 
-            var masteries = data['masteries'];
             var currentMasteryTree = addMasteryTree();
             var currentRow = addRow(currentMasteryTree);
 
@@ -224,16 +226,49 @@ $(function() {
 
                 totalCounter++;
 
+
+
                 if (totalCounter == 15) {
                     totalCounter = 0;
                     currentMasteryTree = addMasteryTree();
                 }
 
-                addMasteryBlock(mastery, currentRow);
+                var block = addMasteryBlock(mastery, currentRow);
+                console.log(totalCounter + " ~ " + mastery['name'])
+                if(totalCounter == 13 ||totalCounter == 14 || totalCounter == 0) {
+                  block.attr("keystone","true");
+                }
 
             });
 
             $(currentMasteryTree).remove();
+
+            var participants = gameData['participants'];
+
+            for(var j = 0; j < participants.length; j++) {
+              var participantMasteries = participants[j]['masteries'];
+
+              for(var k = 0; k < participantMasteries.length; k++) {
+                var participantMastery = participantMasteries[k];
+                var masteryId = participantMastery['masteryId'];
+                var masteryBlock = $(".mastery-block[mastery-id='" + masteryId + "']")
+                if($(masteryBlock).attr("keystone") == "true") {
+                  var playerDiv = $(".player[index='" + j + "']");
+                  var keystoneImg = $(playerDiv).find(".keystone-img");
+                  $(keystoneImg).attr("title",masteries[masteryId]['name']);
+                  $(keystoneImg).attr("src",masteryBlock.attr("src"));
+                  break;
+                }
+              }
+            }
+
+            tippy(".keystone-img", {
+                position: 'top',
+                duration: 200,
+                arrow: true,
+                arrowSize: 'small',
+                size: 'small'
+            });
 
             tippy(".mastery-block", {
                 position: 'top',
@@ -251,7 +286,7 @@ $(function() {
         $('#live-data').css("display", "flex");
 
         $(".player").click(function() {
-            $(".modal-content #modal-runes").empty();
+            $("#modal-runes").empty();
             $(".mask").fadeIn(200);
             var modal = $("#modal");
             $(modal).fadeIn(200);
@@ -336,13 +371,17 @@ $(function() {
                     $("#modal-runes").hide();
 
                     $(".mastery-block").css("filter", "grayscale(100%)");
+                    $(".mastery-block").css("opacity", "0.5");
 
                     var playerMasteries = gameData['participants'][index]['masteries'];
 
                     for (var j = 0; j < playerMasteries.length; j++) {
                         var playerMastery = playerMasteries[j];
                         var masteryId = playerMastery['masteryId'];
-                        $(".mastery-block[mastery-id='" + masteryId + "']").css("filter", "grayscale(0%)");
+                        var masteryImg = $(".mastery-block[mastery-id='" + masteryId + "']");
+                        $(masteryImg).css("filter", "grayscale(0%)");
+                        $(masteryImg).css("opacity", "1");
+
                     }
                     var masteryTrees = $(".mastery-tree");
 
