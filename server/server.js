@@ -26,7 +26,7 @@ var twitch = new TwitchApi({
 var MongoClient = require('mongodb').MongoClient;
 var streamCollection;
 var dataCollection;
-var url = 'mongodb://localhost:27017/live_stream_info';
+var url = 'mongodb://' + config.DB_USERNAME + ':' + config.DB_PASSWORD + '@188.166.146.140:27017/live_stream_info';
 MongoClient.connect(url, function(err, db) {
   console.log("Connected successfully to server");
   streamCollection = db.collection('stream');
