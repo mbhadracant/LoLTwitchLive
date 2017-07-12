@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "TwitchLoLPlayersInfo",
-  "description": "Shows information on all players in the live game the LoL streamer is playing",
+  "description": "Shows information on all players in the game the LoL streamer is playing live",
   "version": "1.0",
   "browser_action": {
     "default_popup": "popup.html"
