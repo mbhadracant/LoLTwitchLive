@@ -1,5 +1,5 @@
 # LoLTwitchLive
-Chrome extension which adds UI to a twitch stream page showing players information on the current game the streamer is playing
+Chrome extension which shows rank, runes, masteries, summoner spells, champions, keystones of all players in the live game a twitch streamer is playing.
 
 ### Prerequisites Installed
 * Mongo DB 
