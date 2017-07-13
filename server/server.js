@@ -3,6 +3,7 @@ var restify = require('restify');
 var cron = require('node-cron');
 var LolApi = require('leagueapi');
 var mail = require('./mail');
+var data = require('./data');
 
 LolApi.init(config.RIOT_API_KEY, 'euw');
 LolApi.setRateLimit(100, 60000 * 2);
@@ -40,7 +41,7 @@ MongoClient.connect(url, function(err, db) {
 
   cron.schedule('0 0 0 * * *', function() {
     console.log('updating runes/masteries (daily run)!')
-    run();
+    data.run();
   });
 
   cron.schedule('0 */1 * * * *', function() {

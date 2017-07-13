@@ -1,5 +1,4 @@
 var LolApi = require('leagueapi');
-var cron = require('node-cron');
 var config = require('./config');
 
 LolApi.init(config.RIOT_API_KEY,'euw');
@@ -8,11 +7,9 @@ LolApi.setRateLimit(100, 60000*2);
 var MongoClient = require('mongodb').MongoClient;
 var dataCollection;
 
-var url = 'mongodb://localhost:27017/live_stream_info';
+var url = 'mongodb://' + config.DB_USERNAME + ':' + config.DB_PASSWORD + '@188.166.146.140:27017/live_stream_info';
 MongoClient.connect(url, function(err, db) {
   dataCollection = db.collection('data');
-  run();
-
 });
 
 function getRegions() {
@@ -26,6 +23,8 @@ function run() {
     setData(region);
   }
 }
+
+exports.run = run;
 
 function setData(region) {
   LolApi.Static.getVersions(region,function(err,data) {
